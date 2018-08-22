@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo Application</title>
+    <h1>ToDo application</h1>
+    <style>
+        body {background-color: lavender; width: 800px; margin: 10px auto;}
+        h1   {color: darkslateblue; text-align: center;}
+        p    {color: violet;}
+        th   {color: blue;
+        padding: 30px;}
+        tr {text-align: center;}
+        td {height:30px;}
+        table {margin: 15px; border-collapse: separate; border-spacing: 2px; border-color: lightgray;}
+        input {text-align: center;}
+</style>
+</head>
+<body>
+<h2>Create Task</h2>
+    <form action = "http://localhost:7000/create" method = "POST">
+         <p>Task <input type = "text" name = "Task" style="width:300px;height:25px;"/>
+             <input type = "submit" value = "submit" /></p>
+    </form>
+<h3> Views</h3>
+    <form action = "http://localhost:7000/" method = "GET" style="float:left;">
+             <input type = "submit" value = "Back Home" style="float:left;"/>
+    </form><br>
+<h2>ToDo list</h2>
+    <table border = 7>
+        <tr>
+            <th style="width:370px;">Task</th>
+            <th>State</th>
+            <th style="width:90px;">Date (in YYYY-mm-dd)</th>
+            <th>Modify</th>
+            <th>Delete</th>
+        </tr>
+        {% for key in todo_list %}
+            {% if (key[2] == "Ready") %}
+              <tr>
+                  <form action="http://localhost:7000/update/{{key[0]}}"
+                      method="POST">
+                <td style="width:370px;">
+                    <input type = "text" value="{{key[1]}}" name="Task" style="width:370px;height:20px;"></td>
+                <td><select name="Type">
+                      <option value="Ready" SELECTED>Ready</option>
+                      <option value="Progress">Progress</option>
+                      <option value="Done">Done</option>
+                    </select></td>
+                <td><input type = "text" value="{{key[3]}}" name="Date"></td>
+                <td><input type = "submit" value="Modify"></form></td>
+                <td><form action = "http://localhost:7000/delete/{{key[0]}}"
+                          method = "POST">
+                    <input type = "submit" value="Delete"></form></td>
+              </tr>
+            {% elif (key[2] == "Progress") %}
+              <tr>
+                  <form action="http://localhost:7000/update/{{key[0]}}"
+                      method="POST">
+                <td bgcolor="#FFBF00" style="width:370px;">
+                    <input type = "text" value="{{key[1]}}" name="Task" style="width:370px;height:20px;"></td>
+                <td bgcolor="#FFBF00"><select name="Type">
+                      <option value="Ready">Ready</option>
+                      <option value="Progress" SELECTED>Progress</option>
+                      <option value="Done">Done</option>
+                    </select></td>
+                <td bgcolor="#FFBF00"><input type = "text" value="{{key[3]}}" name="Date"></td>
+                <td bgcolor="#FFBF00">
+                    <input type = "submit" value="Modify"></form></td>
+                <td bgcolor="#FFBF00"><form action = "http://localhost:7000/delete/{{key[0]}}"
+                          method = "POST">
+                    <input type = "submit" value="Delete"></form></td>
+              </tr>
+           {% elif (key[2] == "Done") %}
+              <tr>
+                  <td bgcolor="#00FF00" style="width:370px;"><strike>{{key[1]}}</strike></td>
+                  <td bgcolor="#00FF00">{{key[2]}}</td>
+                <td bgcolor="#00FF00">{{key[3]}}</td>
+                <td bgcolor="#00FF00"> - </td>
+                <td bgcolor="#00FF00"><form action = "http://localhost:7000/delete/{{key[0]}}"
+                          method = "POST">
+                    <input type = "submit" value="Delete"></form></td>
+              </tr>
+           {% endif %}
+        {% endfor %}
+    </table>
+</body>
+</html>
